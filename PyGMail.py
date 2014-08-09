@@ -5,7 +5,7 @@ from email.mime.text import MIMEText
 class PyGmail:
 	def __init__(self):
 		self.IMAP_SERVER = 'imap.gmail.com' 	#IMAP for receiving emails
-		self.SMTP_SERVER = 'smtp.gmail.com'		#SMTP for sending emails
+		self.SMTP_SERVER = 'smtp.gmail.com'	#SMTP for sending emails
 		self.SMTP_PORT = '587'
 		self.M = None
 		self.response = None
