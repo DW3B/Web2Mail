@@ -25,7 +25,7 @@
 # Version 1.0
 # Date: 2015-08-13
 
-import argparse, urllib2, imaplib, threading, email, sys
+import argparse, urllib2, imaplib, threading, email, sys, re
 
 mail_defaults = {
 	'outlook.com': ('imap-mail.outlook.com', 'smtp-mail.outlook.com'),
@@ -54,7 +54,7 @@ def main():
 	required = parser.add_argument_group("Required")
 	required.add_argument('-u', '--username', required=True, help='Full Email Address')
 	required.add_argument('-p', '--password', required=True, help='Email Password')
-	custom = parser.add_argument_group(required=False)
+	custom = parser.add_argument_group("Custom")
 	custom.add_argument('-i', '--imap-server', help='IMAP Host Name')
 	custom.add_argument('-s', '--smtp-server', help='SMTP Host Name')
 	custom.add_argument('--use-ssl', default=True, help='Use SSL for IMAP and SMTP')
