@@ -69,9 +69,9 @@ def main():
 		return
 		
 	if args.imap_server:
-		mbox = imap_login(args.imap_server, args.username, args.password, args.use_ssl)
+		mbox = imap_login(args.imap_server, args.username, args.password, ssl=args.use_ssl)
 	else:
-		mbox = imap_login(mail_defaults[addr_check.group(1)][0], args.username, args.password, True)
+		mbox = imap_login(mail_defaults[addr_check.group(1)][0], args.username, args.password, ssl=True)
 		
 	
 	
