@@ -54,7 +54,7 @@ def main():
 	required = parser.add_argument_group("Required")
 	required.add_argument('-u', '--username', required=True, help='Full Email Address')
 	required.add_argument('-p', '--password', required=True, help='Email Password')
-	custom = parser.add_mutually_exclusive_group(required=True)
+	custom = parser.add_argument_group(required=False)
 	custom.add_argument('-i', '--imap-server', help='IMAP Host Name')
 	custom.add_argument('-s', '--smtp-server', help='SMTP Host Name')
 	custom.add_argument('--use-ssl', default=True, help='Use SSL for IMAP and SMTP')
