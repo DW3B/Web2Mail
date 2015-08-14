@@ -68,9 +68,9 @@ class PyMail:
 
 	def respond(self, msg, response):
 		reply = MIMEMultipart('alternative')
-		reply['To'] = msg['from']
+		reply['To'] = msg[1]
 		reply['From'] = self.USERNAME
-		reply['Subject'] = 'Re: %' % msg['subject']
+		reply['Subject'] = 'Re: %' % msg[2]
 		reply.attach(MIMEText(response, 'html'))
 		if ssl:
 			s = smtplib.SMTP_SSL(self.SMTP_SERVER, self.SMTP_PORT)
