@@ -19,7 +19,7 @@
 #
 # Email: dweb@dw3b.io 
 # Version 1.1
-# Date: 2015-08-13
+# Date: 2015-08-14
 
 import imaplib, smtplib, email, urllib
 from email.mime.multipart import MIMEMultipart
