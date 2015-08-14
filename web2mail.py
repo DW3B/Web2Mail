@@ -67,6 +67,7 @@ def main():
 	else:
 		m = PyMail(mail_defaults[addr_check.group(1)][0], mail_defaults[addr_check.group(1)][1], args.username, args.password)
 	
+	m.login()
 	unread = m.get_unread_mail()
 	if len(unread) > 0:
 		parse_mail(unread, m)

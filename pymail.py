@@ -52,7 +52,7 @@ class PyMail:
 	def logout(self):
 		self.M.logout()
 	
-	def get_unread_mail(self, folder):
+	def get_unread_mail(self):
 		rc, messages = self.M.search(None, 'UnSeen')
 		return messages[0].split()
 
