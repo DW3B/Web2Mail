@@ -41,6 +41,7 @@ def parse_mail(messages, m):
 		sender, subject, body = m.get_mail_by_id(msg)
 		if subject == 'Proxy This!' and re.match(r'\A(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?', body.rstrip()):
 			m.respond(m.get_mail_by_id(msg), 'Would have sent the static resources back!')
+			return
 
 def main():
 	example = "Examples: \n\n./web2mail.py -u user@email.com -p password\n./web2mail.py -u user@email.com -p password -s imap.email.com --use-ssl"
