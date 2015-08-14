@@ -67,9 +67,13 @@ def main():
 		return
 		
 	if args.imap_server and args.smtp_server:
-		m = PyMail(args.imap_server, args.smtp_server, args.username, args.password, ssl=args.use_ssl)
+		imap_server = args.imap_server
+		smtp_server = args.smtp_server
 	else:
-		m = PyMail(mail_defaults[addr_check.group(1)][0], mail_defaults[addr_check.group(1)][1], args.username, args.password)
+		imap_server = mail_defaults[addr_check.group(1)][0]
+		smtp_server = mail_defaults[addr_check.group(1)][1]
+	m = PyMail(imap_server, smtp_server, args.username, args.password, ssl=args.use_ssl)		
+	print '\n\n IMAP SERVER:\t%s\n SMTP SERVER:\t%s\n USERNAME:\t%s\n' % (imap_server, smtp_server, args.username)
 	
 	m.login()
 	unread = m.get_unread_mail()
@@ -79,4 +83,7 @@ def main():
 		return
 	
 if __name__ == '__main__':
-	main()
+	try:
+		main()
+	except KeyBoardInterrupt:
+		sys.exit()
