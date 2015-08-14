@@ -2,16 +2,24 @@ import imaplib, smtplib, email, urllib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-class PyGmail:
-	def __init__(self):
-		self.IMAP_SERVER = 'imap.gmail.com' 	#IMAP for receiving emails
-		self.SMTP_SERVER = 'smtp.gmail.com'	#SMTP for sending emails
-		self.SMTP_PORT = '587'
+class PyMail:
+	def __init__(self, imap, smtp, ssl=True):
+		self.IMAP_SERVER = imap
+		self.SMTP_SERVER = smtp
+		if ssl:
+			self.IMAP_PORT = 993
+			self.SMTP_PORT = 587
+		else:
+			self.IMAP_PORT = 143
+			self.SMTP_PORT = 25
 		self.M = None
 		self.response = None
 
 	def login(self, username, password):
-		self.M = imaplib.IMAP4_SSL(self.IMAP_SERVER)
+		if self.IMAP_PORT == 993:
+			self.M = imaplib.IMAP4_SSL(self.IMAP_SERVER, self.IMAP_PORT)
+		else:
+			self.M = imaplib.IMAP4(self.IMAP_SERVER, self.IMAP_PORT)
 		rc, self.response = self.M.login(username, password)
 		return rc
 
@@ -39,7 +47,10 @@ class PyGmail:
 		msg['From'] = fromaddr
 		msg['Subject'] = subj
 		msg.attach(MIMEText(body, 'html'))
-		s = smtplib.SMTP(self.SMTP_SERVER, self.SMTP_PORT)
+		if ssl:
+			s = smtplib.SMTP_SSL(self.SMTP_SERVER, self.SMTP_PORT)
+		else:
+			s = smtplib.SMTP(self.SMTP_SERVER, self.SMTP_PORT)
 		s.ehlo()
 		s.starttls()
 		s.ehlo()
