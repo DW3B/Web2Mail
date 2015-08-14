@@ -26,6 +26,7 @@
 # Date: 2015-08-13
 
 import argparse, urllib2, imaplib, threading, email, sys, re
+from pymail import PyMail
 
 mail_defaults = {
 	'outlook.com': ('imap-mail.outlook.com', 'smtp-mail.outlook.com'),
@@ -35,18 +36,11 @@ mail_defaults = {
 	'yahoo.com': ('imap.mail.yahoo.com', 'smtp.mail.gmail.com')
 }
 
-def imap_login(host, username, password, ssl=False):
-	try:
-		if not ssl:
-			mbox = imaplib.IMAP4(host, 143)
-		else:
-			mbox = imaplib.IMAP4_SSL(host, 993)
-		mbox.login(username, password)
-		mbox.select()
-		return mbox
-	except Exception as e:
-		print '[!] %s' % e
-		sys.exit()
+def parse_mail(messages, m):
+	for msg in messages:
+		sender, subject, body = m.get_mail_by_id(msg)
+		if subject == 'Proxy This!' and re.match(r'\A(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?', body.rstrip()):
+			m.respond(m.get_mail_by_id(msg), 'Would have sent the static resources back!')
 
 def main():
 	example = "Examples: \n\n./web2mail.py -u user@email.com -p password\n./web2mail.py -u user@email.com -p password -s imap.email.com --use-ssl"
@@ -68,12 +62,16 @@ def main():
 		print '[!] Please provide a valid email address\n'
 		return
 		
-	if args.imap_server:
-		mbox = imap_login(args.imap_server, args.username, args.password, ssl=args.use_ssl)
+	if args.imap_server and args.smtp_server:
+		m = PyMail(args.imap_server, args.smtp_server, args.username, args.password, ssl=args.use_ssl)
 	else:
-		mbox = imap_login(mail_defaults[addr_check.group(1)][0], args.username, args.password, ssl=True)
-		
+		m = PyMail(mail_defaults[addr_check.group(1)][0], mail_defaults[addr_check.group(1)][1], args.username, args.password)
 	
+	unread = m.get_unread_mail()
+	if len(unread) > 0:
+		parse_mail(unread, m)
+	else:
+		return
 	
 if __name__ == '__main__':
 	main()
