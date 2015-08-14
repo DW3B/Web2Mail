@@ -73,7 +73,7 @@ def main():
 		imap_server = mail_defaults[addr_check.group(1)][0]
 		smtp_server = mail_defaults[addr_check.group(1)][1]
 	m = PyMail(imap_server, smtp_server, args.username, args.password, ssl=args.use_ssl)		
-	print 'IMAP SERVER:\t%s\n SMTP SERVER:\t%s\n USERNAME:\t%s\n' % (imap_server, smtp_server, args.username)
+	print ' IMAP SERVER:\t%s\n SMTP SERVER:\t%s\n USERNAME:\t%s\n' % (imap_server, smtp_server, args.username)
 	
 	m.login()
 	unread = m.get_unread_mail()
