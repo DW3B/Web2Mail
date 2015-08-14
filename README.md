@@ -1,6 +1,4 @@
-Web2Mail_Proxy
+Web2Mail
 ==============
 
-Sends the content of any page to you via Email. Useful for places where web access is filtered, but you need to see the page anyways. 
-
-This repo contains the PyGMail.py module as well. The module makes basic interaction with Gmail much easier. 
+A simple web 'proxy' using email. This script will check the inbox of an email address that you have the credentials to for new messages with a certain subject line. By default, this is 'Proxy This!'. It will then look for URLs in the body of the message, scrape the contents of each of them, save the contents as individual .html files, and finally send them back to you.
