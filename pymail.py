@@ -72,7 +72,7 @@ class PyMail:
 		reply['From'] = self.USERNAME
 		reply['Subject'] = 'Re: %s' % msg[2]
 		reply.attach(MIMEText(response, 'html'))
-		if ssl:
+		if self.SMTP_PORT == 587:
 			s = smtplib.SMTP_SSL(self.SMTP_SERVER, self.SMTP_PORT)
 		else:
 			s = smtplib.SMTP(self.SMTP_SERVER, self.SMTP_PORT)
