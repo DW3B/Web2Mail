@@ -38,10 +38,13 @@ mail_defaults = {
 
 def parse_mail(messages, m):
 	for msg in messages:
-		sender, subject, body = m.get_mail_by_id(msg)
-		if subject == 'Proxy This!' and re.match(r'\A(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?', body.rstrip()):
-			m.respond(m.get_mail_by_id(msg), 'Would have sent the static resources back!')
-			return
+		try:
+			sender, subject, body = m.get_mail_by_id(msg)
+			if subject == 'Proxy This!' and re.match(r'\A(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?', body.rstrip()):
+				m.respond(m.get_mail_by_id(msg), 'Would have sent the static resources back!')
+				return
+		except:
+			continue
 
 def main():
 	example = "Examples: \n\n./web2mail.py -u user@email.com -p password\n./web2mail.py -u user@email.com -p password -s imap.email.com --use-ssl"
@@ -55,7 +58,7 @@ def main():
 	custom.add_argument('--use-ssl', default=True, help='Use SSL for IMAP and SMTP')
 	args = parser.parse_args()
 	
-	print '\n ' + '-' * 69 + '\n ' + ' Web2Mail v1.0 by DW3B\n ' + '-' * 69 + '\n '
+	print '\n ' + '-' * 69 + '\n ' + ' Web2Mail v1.1 by DW3B\n ' + '-' * 69 + '\n '
 	
 	# Check for valid email address
 	addr_check = re.match(r'\A.+@(.+\..{2,})', args.username)
