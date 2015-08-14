@@ -60,10 +60,13 @@ class PyMail:
 		status, resp = self.M.fetch(mailID, '(RFC822)')
 		for respPart in resp:
 			if isinstance(respPart, tuple):
-				msg = email.message_from_string(respPart[1])
-				sender = msg['from']
-				subject = msg['subject']
-				body = msg.get_payload()[0].get_payload()
+				try:
+					msg = email.message_from_string(respPart[1])
+					sender = msg['from']
+					subject = msg['subject']
+					body = msg.get_payload()[0].get_payload()
+				except: 
+					msg
 		return sender, subject, body
 
 	def respond(self, msg, response):
