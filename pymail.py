@@ -63,7 +63,10 @@ class PyMail:
 				msg = email.message_from_string(respPart[1])
 				sender = msg['from']
 				subject = msg['subject']
-				body = msg.get_payload()[0].get_payload()
+				try:
+					body = msg.get_payload()[0].get_payload()
+				except:
+					continue
 		return sender, subject, body
 
 	def respond(self, msg, response):
