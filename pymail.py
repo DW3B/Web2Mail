@@ -66,12 +66,12 @@ class PyMail:
 				body = msg.get_payload()[0].get_payload()
 		return sender, subject, body
 
-	def respond(self, toaddr, subj, body, fromaddr, pwd):
-		msg = MIMEMultipart('alternative')
-		msg['To'] = toaddr
-		msg['From'] = fromaddr
-		msg['Subject'] = subj
-		msg.attach(MIMEText(body, 'html'))
+	def respond(self, msg, response):
+		reply = MIMEMultipart('alternative')
+		reply['To'] = msg['from']
+		reply['From'] = self.USERNAME
+		reply['Subject'] = 'Re: %' % msg['subject']
+		reply.attach(MIMEText(response, 'html'))
 		if ssl:
 			s = smtplib.SMTP_SSL(self.SMTP_SERVER, self.SMTP_PORT)
 		else:
@@ -79,6 +79,6 @@ class PyMail:
 		s.ehlo()
 		s.starttls()
 		s.ehlo()
-		s.login(fromaddr, pwd)
-		s.sendmail(fromaddr, toaddr, msg.as_string())
+		s.login(self.USERNAME, self.PASSWORD)
+		s.sendmail(self.USERNAME, toaddr, reply.as_string())
 		s.close()
