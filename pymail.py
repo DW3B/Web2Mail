@@ -26,7 +26,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 class PyMail:
-	def __init__(self, imap, smtp, ssl=True):
+	def __init__(self, imap, smtp, username, password, ssl=True):
 		self.IMAP_SERVER = imap
 		self.SMTP_SERVER = smtp
 		if ssl:
@@ -35,22 +35,24 @@ class PyMail:
 		else:
 			self.IMAP_PORT = 143
 			self.SMTP_PORT = 25
+		self.USERNAME = username
+		self.PASSWORD = password
 		self.M = None
 		self.response = None
 
-	def login(self, username, password):
+	def login(self):
 		if self.IMAP_PORT == 993:
 			self.M = imaplib.IMAP4_SSL(self.IMAP_SERVER, self.IMAP_PORT)
 		else:
 			self.M = imaplib.IMAP4(self.IMAP_SERVER, self.IMAP_PORT)
-		rc, self.response = self.M.login(username, password)
+		rc, self.response = self.M.login(self.USERNAME, self.PASSWORD)
+		self.M.select('INBOX')
 		return rc
 
 	def logout(self):
 		self.M.logout()
 	
 	def get_unread_mail(self, folder):
-		self.M.select(folder)
 		rc, messages = self.M.search(None, 'UnSeen')
 		return messages[0].split()
 
@@ -61,7 +63,7 @@ class PyMail:
 				msg = email.message_from_string(respPart[1])
 				sender = msg['from']
 				subject = msg['subject']
-				body = msg['body']
+				body = msg.get_payload()[0].get_payload()
 		return sender, subject, body
 
 	def respond(self, toaddr, subj, body, fromaddr, pwd):
